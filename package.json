@@ -1,0 +1,20 @@
+{
+  "name": "tarken-challenge-fullstack",
+  "version": "1.0.0",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "front": "yarn workspace @monorepo/front dev",
+    "front:dev": "yarn workspace @monorepo/front dev",
+    "back": "yarn workspace @monorepo/back start",
+    "back:dev": "yarn workspace @monorepo/back start:dev",
+    "back:prod": "yarn workspace @monorepo/back start:prod"
+  },
+  "repository": "git@github.com:CamposCaio/tarken-challenge-fullstack.git",
+  "author": "CamposCaio <camposcaioh@gmail.com>",
+  "license": "MIT",
+  "private": true
+}

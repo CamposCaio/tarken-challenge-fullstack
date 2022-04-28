@@ -1,0 +1,8 @@
+{
+  "compilersOptions": {
+    "paths": {
+      "packages/back/*": ["packages/back/*"],
+      "packages/front/*": ["packages/front/*"],
+    }
+  },
+}
