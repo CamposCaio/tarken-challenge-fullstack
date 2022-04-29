@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Container } from './styles'
 import IconSearch from '@mui/icons-material/Search'
 import MovieCard from '../../components/MovieCard'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const apiKey = '70f95db1'
 
@@ -41,14 +41,14 @@ async function getMovieData(value: string) {
 export function Search() {
   const [movies, setMovies] = useState<Movie[]>([])
   const [searchValue, setSearchValue] = useState('')
+  const searchValueRef = useRef('')
 
-  function handleSearchMovie(value: string) {
-    setSearchValue(value)
-    getMovieData(value).then((res) => {
-      setMovies(res)
-      console.log(res)
+  useEffect(() => {
+    searchValueRef.current = searchValue
+    getMovieData(searchValue).then((res) => {
+      searchValueRef.current === searchValue && setMovies(res)
     })
-  }
+  }, [searchValue])
 
   return (
     <Container>
@@ -67,7 +67,7 @@ export function Search() {
         autoComplete="off"
       >
         <TextField
-          onChange={({ target }) => handleSearchMovie(target.value)}
+          onChange={({ target }) => setSearchValue(target.value)}
           label="An amazing movie"
           variant="outlined"
         />
@@ -75,27 +75,23 @@ export function Search() {
       </Box>
 
       <Box className="search__box-movie-cards">
-        {movies[0] ? (
-          movies.map((movie, index) => {
-            return (
-              <MovieCard
-                key={index}
-                imageSrc={movie.imageSrc}
-                title={movie.Title}
-                rating={movie.imdbRating}
-              />
-            )
-          })
-        ) : (
-          <div className="search__display-message">
-            <h2>
-              {searchValue
-                ? "We couldn't find the movies you were lookin for :("
-                : "It's a beautiful day today"}
-            </h2>
-            <IconSearch />
-          </div>
-        )}
+        {movies[0]
+          ? movies.map((movie, index) => {
+              return (
+                <MovieCard
+                  key={index}
+                  imageSrc={movie.imageSrc}
+                  title={movie.Title}
+                  rating={movie.imdbRating}
+                />
+              )
+            })
+          : searchValue && (
+              <div className="search__display-message">
+                <h2>We couldn't find the movies you were lookin for :(</h2>
+                <IconSearch />
+              </div>
+            )}
       </Box>
     </Container>
   )

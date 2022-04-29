@@ -3,7 +3,7 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Container } from './styles'
 
 interface TabPanelProps {
@@ -40,7 +40,8 @@ function a11yProps(index: number) {
 }
 
 export default function CustomTabPanel() {
-  const [value, setValue] = useState(1)
+  const location = useLocation()
+  const [value, setValue] = useState(location.pathname === '/search' ? 0 : 1)
   const navigate = useNavigate()
 
   useEffect(() => {

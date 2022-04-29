@@ -4,24 +4,11 @@ export const Container = styled.div`
   width: min(calc(100% - 4rem), 1080px);
   margin-inline: auto;
 
-  .search__search-icon {
-    position: absolute;
-    top: 50%;
-    right: 1rem;
-    transform: translateY(-50%) !important;
-    color: ${({ theme }: any) => theme.palette.text.disabled};
-  }
-
-  .search__box-movie-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
-    gap: 1rem;
-  }
-
   .search__display-message {
     max-width: 43ch;
-    text-align: center;
     margin-inline: auto;
+    margin-top: 4rem;
+    text-align: center;
     position: relative;
     color: ${({ theme }: any) => theme.palette.text.disabled};
 
