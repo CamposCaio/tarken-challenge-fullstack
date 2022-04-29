@@ -1,11 +1,9 @@
 {
   "name": "tarken-challenge-fullstack",
   "version": "1.0.0",
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "front": "yarn workspace @monorepo/front dev",
     "front:dev": "yarn workspace @monorepo/front dev",
