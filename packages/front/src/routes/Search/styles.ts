@@ -4,6 +4,16 @@ export const Container = styled.div`
   width: min(calc(100% - 4rem), 1080px);
   margin-inline: auto;
 
+  .search__box-input {
+    position: relative;
+    width: min(100%, 43ch);
+    margin-block: 1rem;
+
+    & .MuiFormControl-root {
+      width: 100%;
+    }
+  }
+
   .search__search-icon {
     position: absolute;
     top: 50%;

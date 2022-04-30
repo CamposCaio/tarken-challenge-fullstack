@@ -1,10 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
-  ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import { CreateMovieDto } from './movie.dto';
@@ -21,13 +21,18 @@ export class MovieController {
     return this.service.getAllMovies();
   }
 
-  @Get(':id')
-  public getMovie(@Param('id', ParseIntPipe) id: number): Promise<Movie> {
-    return this.service.getMovie(id);
+  @Get(':imdbID')
+  public getMovie(@Param('imdbID') imdbID: string): Promise<Movie> {
+    return this.service.getMovie(imdbID);
   }
 
   @Post()
   public createMovie(@Body() body: CreateMovieDto): Promise<Movie> {
     return this.service.createMovie(body);
+  }
+
+  @Delete(':imdbID')
+  public deleteMovie(@Param('imdbID') imdbID: string): Promise<Movie> {
+    return this.service.deleteMovie(imdbID);
   }
 }

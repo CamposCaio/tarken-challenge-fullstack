@@ -13,17 +13,38 @@ export class MovieService {
     return this.repository.find();
   }
 
-  public getMovie(id: number): Promise<Movie> {
-    return this.repository.findOneBy({ id });
+  public getMovie(imdbID: string): Promise<Movie> {
+    return this.repository.findOneBy({ imdbID });
   }
 
   public createMovie(body: CreateMovieDto): Promise<Movie> {
-    const movie: Movie = new Movie();
+    let movie: Promise<Movie>;
 
-    movie.title = body.title;
-    movie.imdbRating = body.imdbRating;
-    movie.imageSrc = body.imageSrc;
+    this.repository
+      .findOneBy({ imdbID: body.imdbID })
+      .then((movieInDB: Movie) => {
+        if (movieInDB) {
+          movieInDB.deleted = false;
+          movie = this.repository.save(movieInDB);
+        } else {
+          const newMovie = {
+            imdbID: body.imdbID,
+            title: body.title,
+            imdbRating: body.imdbRating,
+            imageSrc: body.imageSrc,
+          };
+          movie = this.repository.save(newMovie);
+        }
+      });
+    return movie;
+  }
 
-    return this.repository.save(movie);
+  public deleteMovie(imdbID: string): Promise<Movie> {
+    let movie: Promise<Movie>;
+    this.repository.findOneBy({ imdbID }).then((movieToUpdate: Movie) => {
+      movieToUpdate.deleted = true;
+      movie = this.repository.save(movieToUpdate);
+    });
+    return movie;
   }
 }

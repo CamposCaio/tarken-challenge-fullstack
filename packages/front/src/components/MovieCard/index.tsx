@@ -5,40 +5,59 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardMedia from '@mui/material/CardMedia'
 import IconStar from '@mui/icons-material/Star'
+import { Movie } from '../../routes/Search'
+import { useState } from 'react'
+import { deleteMoovyAPI, postMoovyAPI } from '../../utils/moovyAPI'
+import { Container } from './styles'
 
 interface Props {
-  imageSrc: string
-  title: string
-  rating: string
+  movie: Movie
 }
 
-export default function MovieCard({ imageSrc, title, rating }: Props) {
+export default function MovieCard({ movie }: Props) {
+  const [isInLibrary, setIsInLibrary] = useState(movie.isInLibrary)
+
+  function insertMovieInLibrary() {
+    postMoovyAPI(movie).then((res) => {
+      setIsInLibrary(res ? true : false)
+    })
+  }
+
+  function removeMovieFromLibrary() {
+    deleteMoovyAPI(movie.imdbID).then((res) => {
+      setIsInLibrary(res ? true : false)
+    })
+  }
+
   return (
-    <Card
-      sx={{
-        maxWidth: 245,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}
-    >
-      <CardMedia
-        component="img"
-        height={300}
-        image={imageSrc}
-        alt="movie cover"
-        sx={{ backgroundColor: '#eaeaea' }}
-      />
-      <CardContent>
-        <Typography fontSize="1.2rem" color="text.secondary" gutterBottom>
-          {title}
-        </Typography>
-        <IconStar fontSize="small" color="primary" />
-        {rating}
-      </CardContent>
-      <CardActions>
-        <Button size="small">Add to my library</Button>
-      </CardActions>
-    </Card>
+    <Container>
+      <Card className="movie-card__card">
+        <CardMedia
+          className="movie-card__card-media"
+          component="img"
+          image={movie.imageSrc}
+          height={300}
+          alt="movie cover"
+        />
+        <CardContent>
+          <Typography fontSize="1.2rem" color="text.secondary" gutterBottom>
+            {movie.title}
+          </Typography>
+          <IconStar fontSize="small" color="primary" />
+          {movie.imdbRating}
+        </CardContent>
+        <CardActions>
+          {isInLibrary ? (
+            <Button onClick={removeMovieFromLibrary} size="small" color="error">
+              Remove from library
+            </Button>
+          ) : (
+            <Button onClick={insertMovieInLibrary} size="small">
+              Add to my library
+            </Button>
+          )}
+        </CardActions>
+      </Card>
+    </Container>
   )
 }

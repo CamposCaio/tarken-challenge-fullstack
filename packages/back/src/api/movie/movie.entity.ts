@@ -12,6 +12,9 @@ export class Movie {
   id: number;
 
   @Column()
+  imdbID: string;
+
+  @Column()
   title: string;
 
   @Column({ length: 7 })
