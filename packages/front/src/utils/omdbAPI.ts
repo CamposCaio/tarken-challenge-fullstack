@@ -11,7 +11,7 @@ export interface OmdbMovie {
   imageSrc: string
 }
 
-export async function searchOmdbAPI(Title: string) {
+export async function searchOmdbAPI(Title: string): Promise<string[]> {
   const { data } = await axios.get(`${OMDB_URL}/?apikey=${OMDB_KEY}&s=${Title}`)
 
   return data.Search?.map((obj: OmdbMovie) => obj.imdbID)

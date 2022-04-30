@@ -24,6 +24,20 @@ export async function getMoovyAPI(imdbID: string) {
   }
 }
 
+export async function getAllMoovyAPI() {
+  try {
+    const { data } = await axios.get<MoovyAPI[]>(
+      `${import.meta.env.VITE_API_URL}/movie`
+    )
+    const onlyNotDeleted = data.filter((data) => {
+      return !data.deleted
+    })
+    return onlyNotDeleted
+  } catch {
+    return null
+  }
+}
+
 export async function postMoovyAPI(movie: Movie) {
   try {
     return axios.post<MoovyAPI>(`${import.meta.env.VITE_API_URL}/movie`, {

@@ -24,7 +24,7 @@ export const Container = styled.div`
 
   .search__box-movie-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(203px, 1fr));
     gap: 1rem;
   }
 

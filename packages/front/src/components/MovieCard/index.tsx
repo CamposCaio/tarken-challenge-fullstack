@@ -12,9 +12,10 @@ import { Container } from './styles'
 
 interface Props {
   movie: Movie
+  onRemove?: (imdbID: any) => void
 }
 
-export default function MovieCard({ movie }: Props) {
+export default function MovieCard({ movie, onRemove }: Props) {
   const [isInLibrary, setIsInLibrary] = useState(movie.isInLibrary)
 
   function insertMovieInLibrary() {
@@ -25,26 +26,28 @@ export default function MovieCard({ movie }: Props) {
 
   function removeMovieFromLibrary() {
     deleteMoovyAPI(movie.imdbID).then((res) => {
-      setIsInLibrary(res ? true : false)
+      if (res && onRemove) onRemove(movie.imdbID)
+      // setIsInLibrary(res ? false : true)
     })
   }
 
   return (
     <Container>
-      <Card className="movie-card__card">
+      <Card className="movie-card">
         <CardMedia
-          className="movie-card__card-media"
+          className="movie-card__image"
           component="img"
           image={movie.imageSrc}
-          height={300}
           alt="movie cover"
         />
         <CardContent>
-          <Typography fontSize="1.2rem" color="text.secondary" gutterBottom>
+          <Typography className="movie-card__content-title">
             {movie.title}
           </Typography>
-          <IconStar fontSize="small" color="primary" />
-          {movie.imdbRating}
+          <div className="movie-card__content-rating">
+            <IconStar className="movie-card__content-star" />
+            {movie.imdbRating}
+          </div>
         </CardContent>
         <CardActions>
           {isInLibrary ? (

@@ -21,7 +21,6 @@ export interface Movie {
 
 async function getMovieData(searchTitle: string) {
   const imdbIDs = await searchOmdbAPI(searchTitle)
-
   const movies = new Array<Movie>(imdbIDs?.length)
 
   for (let i = 0; i < imdbIDs?.length; i++) {
@@ -37,7 +36,6 @@ async function getMovieData(searchTitle: string) {
       }
     } else {
       const movieOnOmdb = await getOmdbAPI(imdbIDs[i])
-
       movieOnOmdb &&
         (movies[i] = {
           imdbID: imdbIDs[i],

@@ -39,12 +39,20 @@ export class MovieService {
     return movie;
   }
 
-  public deleteMovie(imdbID: string): Promise<Movie> {
-    let movie: Promise<Movie>;
-    this.repository.findOneBy({ imdbID }).then((movieToUpdate: Movie) => {
-      movieToUpdate.deleted = true;
-      movie = this.repository.save(movieToUpdate);
-    });
-    return movie;
+  public async deleteMovie(imdbID: string): Promise<Movie> {
+    const movie = await this.repository.findOneBy({ imdbID });
+    if (movie) {
+      movie.deleted = true;
+      return this.repository.save(movie);
+    } else {
+      return null;
+    }
+    //   let movie: Promise<Movie>;
+
+    //   this.repository.findOneBy({ imdbID }).then((movieToUpdate: Movie) => {
+    //     movieToUpdate.deleted = true;
+    //     movie = this.repository.save(movieToUpdate);
+    //   });
+    //   return movie;
   }
 }

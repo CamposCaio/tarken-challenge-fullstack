@@ -32,7 +32,7 @@ export class MovieController {
   }
 
   @Delete(':imdbID')
-  public deleteMovie(@Param('imdbID') imdbID: string): Promise<Movie> {
-    return this.service.deleteMovie(imdbID);
+  public async deleteMovie(@Param('imdbID') imdbID: string): Promise<Movie> {
+    return await this.service.deleteMovie(imdbID);
   }
 }
