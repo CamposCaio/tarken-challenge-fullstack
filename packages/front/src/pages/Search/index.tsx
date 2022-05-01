@@ -11,6 +11,7 @@ import { Movie } from '../../utils/interfaceMovie'
 import { BigInfoMessage } from '../../components/BigInfoMessage'
 import { AlertRemoved } from '../../components/AlertRemoved'
 import { DialogConfirmRemove } from '../../components/DialogConfirmRemove'
+import { AlertAdded } from '../../components/AlertAdded'
 
 export function Search() {
   const [matchedMovies, setMatchedMovies] = useState<Movie[]>([])
@@ -18,6 +19,7 @@ export function Search() {
   const [showLoading, setShowLoading] = useState(false)
   const [movieToConfirmRemove, setMovieToConfirmRemove] = useState<Movie>()
   const [lastRemovedMovie, setLastRemovedMovie] = useState<Movie>()
+  const [lastAddedMovieTitle, setLastAddedMovieTitle] = useState('')
   const searchValueRef = useRef('')
 
   function handleSearchValue(searchValue: string) {
@@ -42,6 +44,7 @@ export function Search() {
   function addMovieToLibrary(movieToAdd: Movie) {
     lastRemovedMovie === movieToAdd && setLastRemovedMovie(undefined)
     postMoovyAPI(movieToAdd).then(() => {
+      setLastAddedMovieTitle(movieToAdd.title)
       handleSearchValue(searchValue)
     })
   }
@@ -63,6 +66,7 @@ export function Search() {
 
   return (
     <Container>
+      {lastAddedMovieTitle && <AlertAdded movieTitle={lastAddedMovieTitle} />}
       {movieToConfirmRemove && (
         <DialogConfirmRemove
           onAction={handleDialogConfirm}
