@@ -2,15 +2,26 @@ import { Container } from './styles'
 import IconSearch from '@mui/icons-material/Search'
 import { useEffect, useState } from 'react'
 import { getAllMoovyAPI } from '../../utils/moovyAPI'
-import { Movie } from '../Search'
 import Box from '@mui/material/Box'
-import MovieCard from '../../components/MovieCard'
+import { MovieCard } from '../../components/MovieCard'
+import { AlertDeleted } from '../../components/AlertDeleted'
+import { Movie } from '../../utils/interfaceMovie'
 
 export function Library() {
   const [movies, setMovies] = useState<Movie[]>([])
+  const [removedMovie, setRemovedMovie] = useState<Movie>()
 
-  function removeMovie(imdbID: string) {
-    setMovies(movies.filter((movie) => movie.imdbID !== imdbID))
+  function handleMovieCardChange(
+    targetMovie: Movie,
+    eventType: 'added' | 'removed'
+  ) {
+    if (eventType === 'added') {
+      setMovies((movies) => [...movies, targetMovie])
+      setRemovedMovie(undefined)
+    } else {
+      setMovies(movies.filter((movie) => movie.imdbID !== targetMovie.imdbID))
+      setRemovedMovie(targetMovie)
+    }
   }
 
   useEffect(() => {
@@ -31,15 +42,21 @@ export function Library() {
 
   return (
     <Container>
+      {removedMovie && (
+        <AlertDeleted
+          removedMovie={removedMovie}
+          onUndo={(movie) => handleMovieCardChange(movie, 'added')}
+        />
+      )}
       <h1>Library</h1>
       <Box className="library__box-movie-cards">
         {movies[0] ? (
-          movies.map((movie, index) => {
+          movies.map((movie) => {
             return (
               <MovieCard
-                key={index}
+                key={movie.imdbID}
                 movie={movie}
-                onRemove={(imdbID) => removeMovie(imdbID)}
+                onChange={handleMovieCardChange}
               />
             )
           })

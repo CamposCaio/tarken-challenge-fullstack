@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import { Container } from './styles'
 import IconSearch from '@mui/icons-material/Search'
-import MovieCard from '../../components/MovieCard'
+import { MovieCard } from '../../components/MovieCard'
 import { useEffect, useRef, useState } from 'react'
 import { getMoovyAPI } from '../../utils/moovyAPI'
 import {
@@ -10,16 +10,10 @@ import {
   getOmdbAPI,
   searchOmdbAPI,
 } from '../../utils/omdbAPI'
+import CircularProgress from '@mui/material/CircularProgress'
+import { Movie } from '../../utils/interfaceMovie'
 
-export interface Movie {
-  imdbID: string
-  title: string
-  imdbRating: string
-  imageSrc: string
-  isInLibrary: boolean
-}
-
-async function getMovieData(searchTitle: string) {
+async function searchForMovies(searchTitle: string) {
   const imdbIDs = await searchOmdbAPI(searchTitle)
   const movies = new Array<Movie>(imdbIDs?.length)
 
@@ -52,12 +46,17 @@ async function getMovieData(searchTitle: string) {
 export function Search() {
   const [movies, setMovies] = useState<Movie[]>([])
   const [searchValue, setSearchValue] = useState('')
+  const [showLoading, setShowLoading] = useState(false)
   const searchValueRef = useRef('')
 
   useEffect(() => {
+    setShowLoading(true)
     searchValueRef.current = searchValue
-    getMovieData(searchValue).then((res) => {
-      searchValueRef.current === searchValue && setMovies(res)
+    searchForMovies(searchValue).then((res) => {
+      if (searchValueRef.current === searchValue) {
+        setShowLoading(false)
+        setMovies(res)
+      }
     })
   }, [searchValue])
 
@@ -89,6 +88,10 @@ export function Search() {
                 <IconSearch />
               </div>
             )}
+        <CircularProgress
+          sx={{ display: showLoading ? 'block' : 'none' }}
+          className="search__loading"
+        />
       </Box>
     </Container>
   )

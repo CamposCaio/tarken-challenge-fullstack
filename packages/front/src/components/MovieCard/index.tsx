@@ -5,29 +5,33 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardMedia from '@mui/material/CardMedia'
 import IconStar from '@mui/icons-material/Star'
-import { Movie } from '../../routes/Search'
-import { useState } from 'react'
-import { deleteMoovyAPI, postMoovyAPI } from '../../utils/moovyAPI'
 import { Container } from './styles'
+import { Movie } from '../../utils/interfaceMovie'
+import { deleteMoovyAPI, postMoovyAPI } from '../../utils/moovyAPI'
+import { useState } from 'react'
 
-interface Props {
+interface MovieCardProps {
   movie: Movie
-  onRemove?: (imdbID: any) => void
+  onChange?: (targetMovie: Movie, eventType: 'added' | 'removed') => void
 }
 
-export default function MovieCard({ movie, onRemove }: Props) {
+export function MovieCard({ movie, onChange }: MovieCardProps) {
   const [isInLibrary, setIsInLibrary] = useState(movie.isInLibrary)
-
-  function insertMovieInLibrary() {
-    postMoovyAPI(movie).then((res) => {
-      setIsInLibrary(res ? true : false)
+  function handleRemoveMovie() {
+    deleteMoovyAPI(movie.imdbID).then((res) => {
+      if (res) {
+        setIsInLibrary(false)
+        onChange && onChange(movie, 'removed')
+      }
     })
   }
 
-  function removeMovieFromLibrary() {
-    deleteMoovyAPI(movie.imdbID).then((res) => {
-      if (res && onRemove) onRemove(movie.imdbID)
-      // setIsInLibrary(res ? false : true)
+  function handleAddMovie() {
+    postMoovyAPI(movie).then((res) => {
+      if (res) {
+        setIsInLibrary(true)
+        onChange && onChange(movie, 'added')
+      }
     })
   }
 
@@ -51,11 +55,11 @@ export default function MovieCard({ movie, onRemove }: Props) {
         </CardContent>
         <CardActions>
           {isInLibrary ? (
-            <Button onClick={removeMovieFromLibrary} size="small" color="error">
+            <Button onClick={handleRemoveMovie} size="small" color="error">
               Remove from library
             </Button>
           ) : (
-            <Button onClick={insertMovieInLibrary} size="small">
+            <Button onClick={handleAddMovie} size="small">
               Add to my library
             </Button>
           )}

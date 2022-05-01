@@ -4,6 +4,15 @@ export const Container = styled.div`
   width: min(calc(100% - 4rem), 1080px);
   margin-inline: auto;
 
+  .search__loading {
+    position: absolute;
+    z-index: 1;
+    color: ${({ theme }: any) => theme.palette.primary.main};
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+  }
+
   .search__box-input {
     position: relative;
     width: min(100%, 43ch);

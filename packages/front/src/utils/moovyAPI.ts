@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Movie } from '../routes/Search'
+import { Movie } from './interfaceMovie'
 
 export interface MoovyAPI {
   id: number
