@@ -8,7 +8,7 @@ interface Props {
 
 export function AlertAdded({ movieTitle }: Props) {
   const [display, setDisplay] = useState(true)
-  const [timeoutID, setTimeoutID] = useState<NodeJS.Timeout>()
+  const [timeoutID, setTimeoutID] = useState<number>()
 
   function handleClose() {
     setDisplay(false)
@@ -18,7 +18,7 @@ export function AlertAdded({ movieTitle }: Props) {
     setDisplay(true)
     timeoutID && clearTimeout(timeoutID)
     setTimeoutID(
-      setTimeout(() => {
+      window.setTimeout(() => {
         setDisplay(false)
       }, 5000)
     )

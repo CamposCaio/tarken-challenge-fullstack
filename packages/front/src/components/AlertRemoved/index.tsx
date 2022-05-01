@@ -11,7 +11,7 @@ interface Props {
 
 export function AlertRemoved({ removedMovie, onClickUndo }: Props) {
   const [display, setDisplay] = useState(true)
-  const [timeoutID, setTimeoutID] = useState<NodeJS.Timeout>()
+  const [timeoutID, setTimeoutID] = useState<number>()
 
   function handleUndo() {
     setDisplay(false)
@@ -22,7 +22,7 @@ export function AlertRemoved({ removedMovie, onClickUndo }: Props) {
     setDisplay(true)
     timeoutID && clearTimeout(timeoutID)
     setTimeoutID(
-      setTimeout(() => {
+      window.setTimeout(() => {
         setDisplay(false)
       }, 5000)
     )
