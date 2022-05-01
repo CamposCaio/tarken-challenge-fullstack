@@ -2,22 +2,20 @@ import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import { useEffect, useState } from 'react'
 import { Movie } from '../../utils/interfaceMovie'
-import { postMoovyAPI } from '../../utils/moovyAPI'
 import { Container } from './styles'
 
 interface Props {
   removedMovie: Movie
-  onUndo?: (removedMovie: Movie) => void
+  onClickUndo: (movieToReAdd: Movie) => void
 }
 
-export function AlertDeleted({ removedMovie, onUndo }: Props) {
+export function AlertRemoved({ removedMovie, onClickUndo }: Props) {
   const [display, setDisplay] = useState(true)
   let timeoutID: NodeJS.Timeout
 
-  function handleAddMovie() {
-    postMoovyAPI(removedMovie).then((res) => {
-      if (res) onUndo && onUndo(removedMovie)
-    })
+  function handleUndo() {
+    setDisplay(false)
+    onClickUndo(removedMovie)
   }
 
   useEffect(() => {
@@ -31,9 +29,8 @@ export function AlertDeleted({ removedMovie, onUndo }: Props) {
   return display ? (
     <Container>
       <Alert
-        className="library__alert-deleted"
         action={
-          <Button onClick={handleAddMovie} color="inherit" size="small">
+          <Button onClick={handleUndo} color="inherit" size="small">
             UNDO
           </Button>
         }

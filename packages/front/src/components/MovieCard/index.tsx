@@ -7,32 +7,19 @@ import CardMedia from '@mui/material/CardMedia'
 import IconStar from '@mui/icons-material/Star'
 import { Container } from './styles'
 import { Movie } from '../../utils/interfaceMovie'
-import { deleteMoovyAPI, postMoovyAPI } from '../../utils/moovyAPI'
-import { useState } from 'react'
 
 interface MovieCardProps {
   movie: Movie
-  onChange?: (targetMovie: Movie, eventType: 'added' | 'removed') => void
+  onAction: (eventType: 'add' | 'remove', targetMovie: Movie) => void
 }
 
-export function MovieCard({ movie, onChange }: MovieCardProps) {
-  const [isInLibrary, setIsInLibrary] = useState(movie.isInLibrary)
-  function handleRemoveMovie() {
-    deleteMoovyAPI(movie.imdbID).then((res) => {
-      if (res) {
-        setIsInLibrary(false)
-        onChange && onChange(movie, 'removed')
-      }
-    })
+export function MovieCard({ movie, onAction }: MovieCardProps) {
+  function handleRemove() {
+    onAction('remove', movie)
   }
 
-  function handleAddMovie() {
-    postMoovyAPI(movie).then((res) => {
-      if (res) {
-        setIsInLibrary(true)
-        onChange && onChange(movie, 'added')
-      }
-    })
+  function handleAdd() {
+    onAction('add', movie)
   }
 
   return (
@@ -54,12 +41,12 @@ export function MovieCard({ movie, onChange }: MovieCardProps) {
           </div>
         </CardContent>
         <CardActions>
-          {isInLibrary ? (
-            <Button onClick={handleRemoveMovie} size="small" color="error">
+          {movie.isInLibrary ? (
+            <Button onClick={handleRemove} size="small" color="error">
               Remove from library
             </Button>
           ) : (
-            <Button onClick={handleAddMovie} size="small">
+            <Button onClick={handleAdd} size="small">
               Add to my library
             </Button>
           )}

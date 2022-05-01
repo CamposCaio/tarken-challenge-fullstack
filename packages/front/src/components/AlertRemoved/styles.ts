@@ -7,9 +7,4 @@ export const Container = styled.div`
   left: 50%;
   transform: translateX(-50%) !important;
   width: min(calc(100% - 4rem), 43ch);
-
-  .MuiButton-root {
-    /* display: block;
-    margin-left: auto; */
-  }
 `

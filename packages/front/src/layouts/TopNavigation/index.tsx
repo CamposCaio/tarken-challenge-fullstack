@@ -39,7 +39,7 @@ function a11yProps(index: number) {
   }
 }
 
-export default function CustomTabPanel() {
+export function TopNavigation() {
   const location = useLocation()
   const [value, setValue] = useState(location.pathname === '/search' ? 0 : 1)
   const navigate = useNavigate()
