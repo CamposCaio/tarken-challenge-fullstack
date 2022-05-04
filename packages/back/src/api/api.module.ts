@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { MovieModule } from './movie/movie.module';
+import { AudiosModule } from './audios/audios.module';
+import { MoviesModule } from './movies/movies.module';
 
 @Module({
-  imports: [MovieModule],
+  imports: [MoviesModule, AudiosModule],
 })
 export class ApiModule {}

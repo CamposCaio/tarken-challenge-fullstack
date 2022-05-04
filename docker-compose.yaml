@@ -1,28 +1,28 @@
 version: "3.8"
 services:
-  back:
-    build: ./packages/back
-    ports:
-      - "3000:3000"
-      - "9229:9229"
-    networks:
-      - moovy-network
-    volumes:
-      - .:/app/back
-      - /app/back/node_modules
-    restart: unless-stopped
-    depends_on:
-      - "db"
+  # back:
+  #   build: ./packages/back
+  #   ports:
+  #     - "3000:3000"
+  #     - "9229:9229"
+  #   networks:
+  #     - moovy-network
+  #   volumes:
+  #     - .:/app/back
+  #     - /app/back/node_modules
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - "db"
 
-  front:
-    build: ./packages/front
-    ports:
-      - "3001:80"
-    networks:
-      - moovy-network
-    volumes:
-      - .:/app/front
-      - /app/front/node_modules
+  # front:
+  #   build: ./packages/front
+  #   ports:
+  #     - "3001:80"
+  #   networks:
+  #     - moovy-network
+  #   volumes:
+  #     - .:/app/front
+  #     - /app/front/node_modules
 
   db:
     container_name: moovy-postgres
