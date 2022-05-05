@@ -10,7 +10,7 @@ export class MoviesService {
   private readonly repository: Repository<Movie>;
 
   public getAllMovies(): Promise<Movie[]> {
-    return this.repository.find();
+    return this.repository.find({ order: { id: 'ASC' } });
   }
 
   public getMovie(imdbID: string): Promise<Movie> {
@@ -47,12 +47,5 @@ export class MoviesService {
     } else {
       return null;
     }
-    //   let movie: Promise<Movie>;
-
-    //   this.repository.findOneBy({ imdbID }).then((movieToUpdate: Movie) => {
-    //     movieToUpdate.deleted = true;
-    //     movie = this.repository.save(movieToUpdate);
-    //   });
-    //   return movie;
   }
 }

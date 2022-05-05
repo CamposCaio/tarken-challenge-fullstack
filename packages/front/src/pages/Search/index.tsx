@@ -37,7 +37,12 @@ export function Search() {
     setMovieToConfirmRemove(undefined)
     deleteMoovyAPI(movieToRemove.imdbID).then(() => {
       setLastRemovedMovie(movieToRemove)
-      handleSearchValue(searchValue)
+      setMatchedMovies((movies) =>
+        movies.map((movie) => {
+          if (movie.imdbID === movieToRemove.imdbID) movie.isInLibrary = false
+          return movie
+        })
+      )
     })
   }
 
@@ -45,7 +50,12 @@ export function Search() {
     lastRemovedMovie === movieToAdd && setLastRemovedMovie(undefined)
     postMoovyAPI(movieToAdd).then(() => {
       setLastAddedMovieTitle(movieToAdd.title)
-      handleSearchValue(searchValue)
+      setMatchedMovies((movies) =>
+        movies.map((movie) => {
+          if (movie.imdbID === movieToAdd.imdbID) movie.isInLibrary = true
+          return movie
+        })
+      )
     })
   }
 
@@ -93,7 +103,6 @@ export function Search() {
         />
         <IconSearch className="search__search-icon" />
       </Box>
-
       <Box className="search__box-movie-cards">
         {matchedMovies[0]
           ? matchedMovies.map((movie) => {

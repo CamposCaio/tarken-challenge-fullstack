@@ -3,6 +3,6 @@ export interface Movie {
   title: string
   imdbRating: string
   imageSrc: string
-  audioSrc?: string
+  audioSrc: string | null
   isInLibrary: boolean
 }

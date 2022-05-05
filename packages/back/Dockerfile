@@ -1,29 +1,12 @@
-FROM node:16.15.0-alpine3.14 AS development
+FROM node:16.15.0-alpine3.14
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
 RUN yarn global add rimraf @nestjs/cli
-RUN yarn install --prod
+RUN yarn
 
 COPY . .
 
-RUN yarn build
-
-FROM node:16.15.0-alpine3.14 AS production
-
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-RUN yarn install --prod
-
-COPY . .
-
-COPY --from=development /usr/src/app/dist ./dist
-
-CMD ["node", "dist/main"]
+CMD ["yarn", "start:dev"]

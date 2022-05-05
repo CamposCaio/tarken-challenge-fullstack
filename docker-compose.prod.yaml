@@ -1,0 +1,63 @@
+version: "3.8"
+services:
+  back:
+    build:
+      context: ./packages/back
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    networks:
+      - moovy-network
+    volumes:
+      - .:/app/back
+      - /app/back/node_modules
+    restart: unless-stopped
+    depends_on:
+      - "db"
+
+  front:
+    build:
+      context: ./packages/front
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3333:80"
+    networks:
+      - moovy-network
+    # volumes:
+    #   - .:/app/front
+    #   - /app/front/node_modules
+
+  db:
+    container_name: moovy-postgres
+    image: postgres:14.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - moovy-network
+
+  pgadmin:
+    image: dpage/pgadmin4:6.8
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "15432:80"
+    depends_on:
+      - db
+    networks:
+      - moovy-network
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  moovy-network:
+    driver: bridge

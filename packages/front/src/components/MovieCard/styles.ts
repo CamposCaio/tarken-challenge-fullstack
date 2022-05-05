@@ -3,10 +3,46 @@ import styled from '@emotion/styled'
 export const Container = styled.div`
   .movie-card {
     height: 100%;
+    max-width: 360px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+  }
+
+  .movie-card__record-on-app {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    line-height: 100%;
+    width: calc(100% - 2rem);
+    text-align: center;
+    left: 50%;
+    top: 129px;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .movie-card__container-play {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    left: 50%;
+    top: 129px;
+    height: 3rem;
+    width: 3rem;
+    min-width: 3rem;
+    transform: translate(-50%, -50%) !important;
+    border-radius: 1.5rem;
+    background-color: #fff;
+  }
+
+  .movie-card__play {
+    color: ${({ theme }: any) => theme.palette.primary.main};
+    font-size: 2.5rem;
   }
 
   .movie-card__image {

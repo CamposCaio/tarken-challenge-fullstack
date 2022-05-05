@@ -22,4 +22,15 @@ export class AudiosService {
     movieInDB.audioSrc = filename;
     this.repository.save(movieInDB);
   }
+
+  public async deleteAudio(imdbID: string): Promise<Movie> {
+    console.log('deleting audio...');
+
+    const movieInDB = await this.repository.findOneBy({ imdbID });
+    if (!movieInDB) return;
+    const audioPath = join(process.cwd(), `audios/${movieInDB.audioSrc}`);
+    fs.unlinkSync(audioPath);
+    movieInDB.audioSrc = null;
+    return this.repository.save(movieInDB);
+  }
 }

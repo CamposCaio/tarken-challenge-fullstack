@@ -29,6 +29,7 @@ export function Library() {
           title: movie.title,
           imdbRating: movie.imdbRating,
           imageSrc: movie.imageSrc,
+          audioSrc: movie.audioSrc,
           isInLibrary: true,
         }
       })
@@ -61,9 +62,12 @@ export function Library() {
   }
 
   function handleMovieCard(eventType: 'add' | 'remove', targetMovie: Movie) {
-    eventType === 'add'
-      ? addMovieToLibrary(targetMovie)
-      : setMovieToConfirmRemove(targetMovie)
+    if (eventType === 'add') addMovieToLibrary(targetMovie)
+    else {
+      targetMovie.audioSrc === null
+        ? handleConfirmRemove(targetMovie)
+        : setMovieToConfirmRemove(targetMovie)
+    }
   }
 
   useEffect(synchronizeMoviesInLibrary, [])

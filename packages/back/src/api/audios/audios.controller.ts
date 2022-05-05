@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -12,6 +13,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AudiosService } from './audios.service';
+import { Express } from 'express';
 
 @Controller('audios')
 export class AudiosController {
@@ -43,8 +45,8 @@ export class AudiosController {
     await this.service.createAudio(imdbID, file.filename);
   }
 
-  // @Delete(':imdbID')
-  // public async deleteAudio(@Param('imdbID') imdbID: string): Promise<Movie> {
-  //   return await this.service.deleteMovie(imdbID);
-  // }
+  @Delete(':imdbID')
+  public async deleteAudio(@Param('imdbID') imdbID: string) {
+    return await this.service.deleteAudio(imdbID);
+  }
 }

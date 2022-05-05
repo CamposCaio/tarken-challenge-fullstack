@@ -7,7 +7,7 @@ export interface MoovyAPI {
   title: string
   imdbRating: string
   imageSrc: string
-  audioSrc?: string
+  audioSrc: string | null
   deleted: boolean
   createdAt: Date
   updatedAt: Date

@@ -32,6 +32,7 @@ export async function searchOmdbAPI(Title: string): Promise<Movie[]> {
           title: movieInLibrary.title,
           imdbRating: movieInLibrary.imdbRating,
           imageSrc: movieInLibrary.imageSrc,
+          audioSrc: movieInLibrary.audioSrc,
           isInLibrary: !movieInLibrary.deleted,
         }
       } else {
@@ -42,6 +43,7 @@ export async function searchOmdbAPI(Title: string): Promise<Movie[]> {
             title: movieOnOmdb.Title,
             imdbRating: movieOnOmdb.imdbRating,
             imageSrc: getImageSrcOmdbAPI(imdbIDs[i]),
+            audioSrc: null,
             isInLibrary: false,
           })
       }
