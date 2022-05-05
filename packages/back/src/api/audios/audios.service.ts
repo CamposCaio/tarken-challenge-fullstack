@@ -12,13 +12,14 @@ export class AudiosService {
 
   public async getAudio(imdbID: string): Promise<fs.ReadStream> {
     const movieInDB = await this.repository.findOneBy({ imdbID });
+    if (!movieInDB) return null;
     const audioPath = join(process.cwd(), `audios/${movieInDB.audioSrc}`);
     return fs.existsSync(audioPath) ? fs.createReadStream(audioPath) : null;
   }
 
   public async createAudio(imdbID: string, filename: string) {
     const movieInDB = await this.repository.findOneBy({ imdbID });
-    if (!movieInDB) return;
+    if (!movieInDB) return null;
     movieInDB.audioSrc = filename;
     this.repository.save(movieInDB);
   }

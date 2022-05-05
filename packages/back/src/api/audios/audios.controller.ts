@@ -2,6 +2,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   Param,
   Post,
@@ -14,7 +16,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AudiosService } from './audios.service';
 import { Express } from 'express';
+import { ApiTags } from '@nestjs/swagger/dist/decorators';
 
+@ApiTags('audios')
 @Controller('audios')
 export class AudiosController {
   @Inject(AudiosService)
@@ -26,10 +30,16 @@ export class AudiosController {
     @Response({ passthrough: true }) res
   ): Promise<StreamableFile> {
     const file = await this.service.getAudio(imdbID);
-    res.set({
-      'Content-Type': 'audio/mp4',
-    });
-    return new StreamableFile(file);
+    if (file) {
+      res.set({
+        'Content-Type': 'audio/mp4',
+      });
+      return new StreamableFile(file);
+    }
+    throw new HttpException(
+      'No audio with this imdbID were found in the file system',
+      HttpStatus.NOT_FOUND
+    );
   }
 
   @Post(':imdbID')
@@ -42,11 +52,22 @@ export class AudiosController {
     @Param('imdbID') imdbID: string,
     @UploadedFile() file: Express.Multer.File
   ) {
-    await this.service.createAudio(imdbID, file.filename);
+    if (!file)
+      throw new HttpException('No file specified', HttpStatus.BAD_REQUEST);
+    const res = await this.service.createAudio(imdbID, file.filename);
+    if (res) return res;
+    throw new HttpException(
+      'No movie with this imdbID were found in the database',
+      HttpStatus.NOT_FOUND
+    );
   }
 
   @Delete(':imdbID')
   public async deleteAudio(@Param('imdbID') imdbID: string) {
-    return await this.service.deleteAudio(imdbID);
+    const res = await this.service.deleteAudio(imdbID);
+    throw new HttpException(
+      'No movie with this imdbID were found in the database',
+      HttpStatus.NOT_FOUND
+    );
   }
 }

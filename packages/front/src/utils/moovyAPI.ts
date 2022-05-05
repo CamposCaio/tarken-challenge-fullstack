@@ -40,12 +40,15 @@ export async function getAllMoovyAPI() {
 
 export async function postMoovyAPI(movie: Movie) {
   try {
-    return axios.post<MoovyAPI>(`${import.meta.env.VITE_API_URL}/movies`, {
-      imdbID: movie.imdbID,
-      title: movie.title,
-      imdbRating: movie.imdbRating,
-      imageSrc: movie.imageSrc,
-    })
+    return axios.post<MoovyAPI>(
+      `${import.meta.env.VITE_API_URL}/movies/a-not-very-secret-token`,
+      {
+        imdbID: movie.imdbID,
+        title: movie.title,
+        imdbRating: movie.imdbRating,
+        imageSrc: movie.imageSrc,
+      }
+    )
   } catch {
     return null
   }
