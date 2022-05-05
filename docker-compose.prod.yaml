@@ -1,20 +1,33 @@
 version: "3.8"
 services:
+  postgres:
+    container_name: moovy-postgres
+    image: postgres:14.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
   back:
     build:
       context: ./packages/back
       dockerfile: Dockerfile.prod
     ports:
       - "3000:3000"
-      - "9229:9229"
-    networks:
-      - moovy-network
-    volumes:
-      - .:/app/back
-      - /app/back/node_modules
+    environment:
+      - DATABASE_HOST=moovy-postgres
+      - DATABASE_NAME=moovy
+      - DATABASE_USER=admin
+      - DATABASE_PASSWORD=123
+      - DATABASE_PORT=5432
     restart: unless-stopped
     depends_on:
-      - "db"
+      - "postgres"
 
   front:
     build:
@@ -22,42 +35,9 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - "3333:80"
-    networks:
-      - moovy-network
-    # volumes:
-    #   - .:/app/front
-    #   - /app/front/node_modules
-
-  db:
-    container_name: moovy-postgres
-    image: postgres:14.2-alpine
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - db:/var/lib/postgresql/data
-    networks:
-      - moovy-network
-
-  pgadmin:
-    image: dpage/pgadmin4:6.8
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
-      PGADMIN_DEFAULT_PASSWORD: "admin"
-    ports:
-      - "15432:80"
     depends_on:
-      - db
-    networks:
-      - moovy-network
+      - "back"
 
 volumes:
-  db:
+  postgres:
     driver: local
-
-networks:
-  moovy-network:
-    driver: bridge

@@ -24,8 +24,6 @@ export class AudiosService {
   }
 
   public async deleteAudio(imdbID: string): Promise<Movie> {
-    console.log('deleting audio...');
-
     const movieInDB = await this.repository.findOneBy({ imdbID });
     if (!movieInDB) return;
     const audioPath = join(process.cwd(), `audios/${movieInDB.audioSrc}`);
