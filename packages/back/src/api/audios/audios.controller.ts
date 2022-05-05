@@ -65,6 +65,7 @@ export class AudiosController {
   @Delete(':imdbID')
   public async deleteAudio(@Param('imdbID') imdbID: string) {
     const res = await this.service.deleteAudio(imdbID);
+    if (res) return res;
     throw new HttpException(
       'No movie with this imdbID were found in the database',
       HttpStatus.NOT_FOUND

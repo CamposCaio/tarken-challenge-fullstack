@@ -48,6 +48,10 @@ export function MovieCard({ movie, onAction }: MovieCardProps) {
     source.src = `${import.meta.env.VITE_API_URL}/audios/${movie.imdbID}`
     source.type = 'audio/mp4'
     audio.appendChild(source)
+    audio.addEventListener('ended', () => {
+      audio.currentTime = 0
+      setIsPlaying(false)
+    })
     setAudio(audio)
   }, [])
 
