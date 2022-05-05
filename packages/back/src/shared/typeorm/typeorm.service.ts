@@ -15,6 +15,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: this.config.get<string>('DATABASE_NAME'),
       username: this.config.get<string>('DATABASE_USER'),
       password: this.config.get<string>('DATABASE_PASSWORD'),
+      // /* Use ssl only for production */
       // ssl: {
       //   ca: this.config.get<string>('SSL_CERT'),
       // },
