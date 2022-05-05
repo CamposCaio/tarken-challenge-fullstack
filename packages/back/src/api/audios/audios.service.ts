@@ -22,6 +22,7 @@ export class AudiosService {
     if (!movieInDB) return null;
     movieInDB.audioSrc = filename;
     this.repository.save(movieInDB);
+    return movieInDB;
   }
 
   public async deleteAudio(imdbID: string): Promise<Movie> {
